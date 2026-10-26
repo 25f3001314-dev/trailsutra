@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="_csrf" th:content="${_csrf.token}">
+  <title th:text="${title + ' | TrailSutra'}">TrailSutra</title>
+  <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header class="topbar" th:fragment="header">
+  <div class="brand">Trail<span>Sutra</span></div>
+  <div class="top-title">Investigation Support</div>
+  <div class="data-badge">SYNTHETIC DATA</div>
+  <div class="user">Signed in: <b th:text="${username}">officer</b></div>
+</header>
+<aside class="sidebar" th:fragment="sidebar">
+  <div class="side-brand">TrailSutra</div>
+  <a th:href="@{/overview}" th:classappend="${activePage == 'overview'} ? 'active' : ''">Case Overview</a>
+  <a th:if="${canIntake}" th:href="@{/intake}" th:classappend="${activePage == 'intake'} ? 'active' : ''">Complaint Intake</a>
+  <a th:if="${canTrail}" th:href="@{/trail}" th:classappend="${activePage == 'trail'} ? 'active' : ''">Money Trail</a>
+  <a th:if="${canTriage}" th:href="@{/triage}" th:classappend="${activePage == 'triage'} ? 'active' : ''">Account Triage</a>
+  <a th:if="${canReview}" th:href="@{/review}" th:classappend="${activePage == 'review'} ? 'active' : ''">Review &amp; Lien</a>
+  <a th:if="${canReports}" th:href="@{/reports}" th:classappend="${activePage == 'reports'} ? 'active' : ''">Reports</a>
+  <a th:href="@{/settings}" th:classappend="${activePage == 'settings'} ? 'active' : ''">Settings</a>
+  <form th:action="@{/logout}" method="post">
+    <button type="submit" class="side-logout">Logout</button>
+  </form>
+</aside>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Money Trail')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<aside th:replace="~{fragments/layout :: sidebar}"></aside>
+<main class="content">
+  <section class="panel rose">
+    <div class="panel-head"><b class="num">3</b><div><h2>Money Trail</h2></div></div>
+    <div class="legend"><span>Victim</span><span>Relay</span><span>Aggregator candidate</span><span>Other account</span></div>
+    <div id="trailGraph" aria-label="Time ordered transaction network"></div>
+    <div class="reason-card" id="reasonCard" role="status"></div>
+    <h3>Time-ordered Transactions</h3>
+    <div class="table-wrap">
+      <table><thead><tr><th>Time</th><th>From</th><th>To</th><th>Amount (₹)</th><th>Transaction</th></tr></thead>
+        <tbody>
+        <tr th:each="tx : ${trail}">
+          <td th:text="${tx.event_at}">Time</td>
+          <td th:text="${tx.src_name}">Source</td>
+          <td th:text="${tx.dst_name}">Destination</td>
+          <td th:text="${#numbers.formatDecimal(tx.amount_paise / 100.0,1,2)}">0.00</td>
+          <td th:text="${tx.txn_id}">Transaction ID</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+<script th:inline="javascript">
+  const graphNodes = /*[[${nodes}]]*/ [];
+  const graphEdges = /*[[${edges}]]*/ [];
+</script>
+<script defer th:src="@{/js/app.js}"></script>
+</body>
+</html>

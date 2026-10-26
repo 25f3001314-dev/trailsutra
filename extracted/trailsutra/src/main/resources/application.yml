@@ -1,0 +1,63 @@
+server:
+  port: 8080
+  forward-headers-strategy: framework
+spring:
+  application:
+    name: TrailSutra
+  datasource:
+    url: jdbc:h2:file:./data/trailsutra;AUTO_SERVER=TRUE
+    username: sa
+    password: ${DB_PASSWORD:}
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+  thymeleaf:
+    cache: false
+  jackson:
+    time-zone: Asia/Kolkata
+trailsutra:
+  crypto:
+    hmac-key: ${TRAILSUTRA_HMAC_KEY:local-development-hmac-key-change-before-use-42}
+    encryption-key: ${TRAILSUTRA_ENCRYPTION_KEY:local-development-encryption-key-42}
+  matching:
+    weights:
+      reference: 0.40
+      amount: 0.25
+      victim: 0.20
+      time: 0.15
+    high-confidence: 0.90
+    margin: 0.15
+    manual-review: 0.70
+    time-window-minutes: 30
+  trail:
+    max-hops: 6
+    window-hours: 24
+    relay-threshold: 0.80
+    watch-threshold: 0.60
+    monitor-threshold: 0.35
+    fast-forward-minutes: 15
+  risk:
+    intercept: -1.7
+    calibration: [0.05, 0.12, 0.24, 0.41, 0.59, 0.73, 0.84, 0.92]
+    coefficients:
+      pass-through: 2.1
+      fan-out: 0.35
+      shared-endpoints: 0.9
+      burst: 0.7
+      cycle: 0.8
+      retained-balance: -1.1
+      account-age: -0.4
+      unique-customers: -0.8
+  users:
+    bank-analyst-password: ${BANK_ANALYST_PASSWORD:ChangeMeBank42!}
+    officer-password: ${OFFICER_PASSWORD:ChangeMeOfficer42!}
+    reviewer-password: ${REVIEWER_PASSWORD:ChangeMeReviewer42!}
+    auditor-password: ${AUDITOR_PASSWORD:ChangeMeAuditor42!}

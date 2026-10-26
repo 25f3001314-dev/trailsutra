@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Investigation Review')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<aside th:replace="~{fragments/layout :: sidebar}"></aside>
+<main class="content">
+  <section class="panel violet">
+    <div class="panel-head"><b class="num">5</b><div><h2>Investigation Review &amp; Lien</h2></div></div>
+    <div class="review-grid">
+      <div class="soft-card">
+        <h3>Account Details</h3>
+        <p><b>Account Holder:</b> <span th:text="${account.display_name}">Account</span></p>
+        <p><b>Account Type:</b> <span th:text="${account.segment}">Account type</span></p>
+        <p><b>Account:</b> <span th:text="${account.masked_account}">(xxxx0000)</span></p>
+        <p><b>Total Balance:</b> <span th:text="${'₹' + #numbers.formatDecimal(account.balance_paise / 100.0,1,2)}">₹0.00</span></p>
+        <p><b>Tainted Amount:</b> <span th:text="${'₹' + #numbers.formatDecimal(account.tainted_held_paise / 100.0,1,2)}">₹0.00</span></p>
+      </div>
+      <div class="why">
+        <h3>Account Indicators</h3>
+        <p><b>Role:</b> <span th:text="${account.role}">Suspected lead</span></p>
+        <p><b>Risk Score:</b> <span th:text="${#numbers.formatDecimal(account.risk,1,2)}">0.00</span></p>
+        <p><b>Monthly Turnover:</b> <span th:text="${'₹' + #numbers.formatDecimal(account.monthly_turnover_paise / 100.0,1,2)}">₹0.00</span></p>
+        <p th:text="${account.reasons}">Review available account evidence</p>
+      </div>
+      <div class="recommendation">
+        <h3>Review Decision</h3>
+        <form id="reviewForm">
+          <input type="hidden" name="caseId" th:value="${caseId}">
+          <input type="hidden" name="token" th:value="${account.token}">
+          <label>Written reason<textarea name="reason" required minlength="12"
+              aria-label="Written review reason"></textarea></label>
+          <label>Lien amount (₹)<input name="lien" type="number" min="0" step="0.01"
+              th:max="${account.balance_paise / 100.0}"
+              th:value="${account.tainted_held_paise / 100.0}" aria-label="Lien amount"></label>
+          <div class="actions">
+            <button type="button" class="primary" data-decision="APPROVE">Approve</button>
+            <button type="button" class="secondary" data-decision="DISMISS">Dismiss</button>
+          </div>
+          <p id="reviewStatus" role="status"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+<script defer th:src="@{/js/review.js}"></script>
+</body>
+</html>

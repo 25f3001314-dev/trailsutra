@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Reports and Audit')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<aside th:replace="~{fragments/layout :: sidebar}"></aside>
+<main class="content">
+  <section class="panel cyan">
+    <div class="panel-head"><b class="num">6</b><div><h2>Evidence Report &amp; Audit Log</h2></div></div>
+    <div class="report-grid">
+      <div class="soft-card">
+        <h3>Generate Report</h3>
+        <p>Case ID: <b th:text="${caseId}">TS-2026-000458</b></p>
+        <button class="primary" id="reportButton"
+                th:attr="data-report-url=@{/api/reports/{caseId}.pdf(caseId=${caseId})}">Generate PDF Report</button>
+        <p id="reportStatus" role="status"></p>
+      </div>
+      <div class="soft-card">
+        <h3>Report Contents</h3>
+        <p>Case summary and linked transaction history</p>
+        <p>Observed records and review decisions</p>
+        <p>Source hashes and audit history</p>
+      </div>
+    </div>
+    <h3>Audit Log</h3>
+    <div class="table-wrap">
+      <table><thead><tr><th>#</th><th>Time</th><th>Event</th><th>Hash</th></tr></thead>
+        <tbody><tr th:each="row : ${auditRows}">
+          <td th:text="${row.id}">1</td><td th:text="${row.created_at}">Time</td>
+          <td th:text="${row.event_json}">Event</td><td><code th:text="${row.event_hash}">Hash</code></td>
+        </tr></tbody>
+      </table>
+    </div>
+    <button class="secondary" id="verifyAudit">Verify audit chain</button>
+    <span id="auditStatus" role="status"></span>
+  </section>
+</main>
+<script defer th:src="@{/js/reports.js}"></script>
+</body>
+</html>

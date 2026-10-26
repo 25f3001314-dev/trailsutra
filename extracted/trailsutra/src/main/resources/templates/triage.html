@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Account Triage')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<aside th:replace="~{fragments/layout :: sidebar}"></aside>
+<main class="content">
+  <section class="panel amber">
+    <div class="panel-head"><b class="num">4</b><div><h2>Mule Risk &amp; Account Triage</h2></div></div>
+    <div class="table-wrap">
+      <table><thead><tr><th>Account</th><th>Role</th><th>Risk Score</th><th>Key Reasons</th><th>Recommendation</th></tr></thead>
+        <tbody>
+        <tr th:each="account : ${accounts}">
+          <td><b th:text="${account.display_name}">Account</b><br><small th:text="${account.masked_account}">(xxxx0000)</small></td>
+          <td th:text="${account.role}">Suspected lead</td>
+          <td><span class="chip warn" th:text="${#numbers.formatDecimal(account.risk,1,2)}">0.00</span></td>
+          <td th:text="${account.reasons}">Review available account evidence</td>
+          <td th:text="${account.recommendation}">Review required</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="notice">Indicators support investigation and do not trigger account action.</p>
+  </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Settings')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<aside th:replace="~{fragments/layout :: sidebar}"></aside>
+<main class="content">
+  <section class="panel settings">
+    <h2>Settings</h2>
+    <p>Transaction amounts use paise as their stored unit. Event times are recorded in UTC.</p>
+  </section>
+</main>
+</body>
+</html>

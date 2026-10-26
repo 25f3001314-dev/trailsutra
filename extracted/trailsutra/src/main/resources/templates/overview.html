@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Case Overview')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<aside th:replace="~{fragments/layout :: sidebar}"></aside>
+<main class="content">
+  <section class="panel blue">
+    <div class="panel-head"><b class="num">1</b><div><h2>Case Overview</h2></div>
+      <span class="status" th:text="${overview.status}">Under Review</span></div>
+    <div class="case-meta"><b th:text="${overview.case_id}">TS-2026-000458</b>
+      <span>Officer: <span th:text="${overview.officer}">Officer</span></span></div>
+    <div class="stats">
+      <article><small>Complaint Amount</small><strong th:text="${'₹' + #numbers.formatDecimal(overview.amount_paise / 100.0,1,2)}">₹0.00</strong></article>
+      <article><small>Accounts with assessed leads</small><strong th:text="${overview.lead_count}">0</strong></article>
+      <article><small>Observed transactions</small><strong th:text="${overview.observed_count}">0</strong></article>
+      <article><small>Case subject</small><strong th:text="${overview.victim_name}">Account holder</strong></article>
+    </div>
+    <div class="notice">Account indicators are suspected leads and require human review.</div>
+  </section>
+</main>
+</body>
+</html>

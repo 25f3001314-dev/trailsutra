@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Complaint Intake and Matching')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+<aside th:replace="~{fragments/layout :: sidebar}"></aside>
+<main class="content">
+  <section class="panel mint">
+    <div class="panel-head"><b class="num">2</b><div><h2>Complaint Intake &amp; Matching</h2></div></div>
+    <form id="matchForm" class="fields">
+      <input type="hidden" name="caseId" th:value="${caseId}">
+      <label>NCRP ID<input name="ncrpId" required th:value="${complaint.complaintRef}"></label>
+      <label>Victim Name<input name="victimName" required th:value="${complaint.victimName}"></label>
+      <label>Amount (₹)<input name="amount" type="number" min="0.01" step="0.01" required
+          th:value="${complaint.amountPaise / 100.0}"></label>
+      <label>Incident Time<input name="incidentAt" type="datetime-local" required th:value="${incidentAt}"></label>
+      <label>Payer Bank<input name="payerBank" required th:value="${complaint.payerBank}"></label>
+      <label>Reference<input name="reference" th:value="${complaint.referenceToken}"></label>
+      <button type="submit" class="primary">Find Matching Transactions</button>
+    </form>
+    <p id="matchStatus" role="status"></p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Rank</th><th>Score</th><th>Transaction</th><th>Time</th><th>From</th><th>To</th><th>Action</th></tr></thead>
+        <tbody id="matchResults"></tbody>
+      </table>
+    </div>
+    <p id="confirmStatus" role="status"></p>
+  </section>
+</main>
+<script defer th:src="@{/js/intake.js}"></script>
+</body>
+</html>
