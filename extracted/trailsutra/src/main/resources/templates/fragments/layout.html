@@ -11,7 +11,7 @@
 <header class="topbar" th:fragment="header">
   <div class="brand">Trail<span>Sutra</span></div>
   <div class="top-title">Investigation Support</div>
-  <div class="data-badge">SYNTHETIC DATA</div>
+  <div class="data-badge" th:text="${roleLabel}">Officer</div>
   <div class="user">Signed in: <b th:text="${username}">officer</b></div>
 </header>
 <aside class="sidebar" th:fragment="sidebar">

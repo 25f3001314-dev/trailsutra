@@ -328,6 +328,7 @@ public class DashboardController {
     private void addLayout(Model model, Authentication auth, String activePage) {
         List<String> roles = auth.getAuthorities().stream().map(a -> a.getAuthority()).toList();
         model.addAttribute("username", auth.getName());
+        model.addAttribute("roleLabel", roles.contains("ROLE_INVESTIGATING_OFFICER") ? "Investigating Officer" : roles.contains("ROLE_REVIEWER") ? "Reviewer" : roles.contains("ROLE_AUDITOR") ? "Auditor" : roles.contains("ROLE_BANK_ANALYST") ? "Bank Analyst" : "User");
         model.addAttribute("activePage", activePage);
         model.addAttribute("canIntake", roles.contains("ROLE_INVESTIGATING_OFFICER"));
         model.addAttribute("canTrail", roles.contains("ROLE_INVESTIGATING_OFFICER")
