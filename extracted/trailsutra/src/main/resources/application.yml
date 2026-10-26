@@ -24,6 +24,8 @@ spring:
   jackson:
     time-zone: Asia/Kolkata
 trailsutra:
+  explainer:
+    enabled: false
   crypto:
     hmac-key: ${TRAILSUTRA_HMAC_KEY:local-development-hmac-key-change-before-use-42}
     encryption-key: ${TRAILSUTRA_ENCRYPTION_KEY:local-development-encryption-key-42}

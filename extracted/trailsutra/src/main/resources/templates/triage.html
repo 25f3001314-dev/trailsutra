@@ -14,7 +14,13 @@
           <td><b th:text="${account.display_name}">Account</b><br><small th:text="${account.masked_account}">(xxxx0000)</small></td>
           <td th:text="${account.role}">Suspected lead</td>
           <td><span class="chip warn" th:text="${#numbers.formatDecimal(account.risk,1,2)}">0.00</span></td>
-          <td th:text="${account.reasons}">Review available account evidence</td>
+          <td>
+            <span th:text="${account.reasons}">Review available account evidence</span>
+            <div th:if="${account.explained_reasons != null}">
+              <strong>AI-assisted wording, check against source rows</strong>
+              <p th:text="${account.explained_reasons}"></p>
+            </div>
+          </td>
           <td th:text="${account.recommendation}">Review required</td>
         </tr>
         </tbody>

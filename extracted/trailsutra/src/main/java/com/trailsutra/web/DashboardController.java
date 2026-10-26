@@ -1,6 +1,7 @@
 package com.trailsutra.web;
 
 import com.trailsutra.audit.AuditService;
+import com.trailsutra.explainer.PlainLanguageExplainer;
 import com.trailsutra.matching.MatchingService;
 import com.trailsutra.report.ReportService;
 import com.trailsutra.tokenisation.TokenisationService;
@@ -33,14 +34,17 @@ public class DashboardController {
     private final TokenisationService tokens;
     private final ReportService reports;
     private final MatchingService matching;
+    private final PlainLanguageExplainer explainer;
 
     public DashboardController(JdbcTemplate jdbc, AuditService audit, TokenisationService tokens,
-                               ReportService reports, MatchingService matching) {
+                               ReportService reports, MatchingService matching,
+                               PlainLanguageExplainer explainer) {
         this.jdbc = jdbc;
         this.audit = audit;
         this.tokens = tokens;
         this.reports = reports;
         this.matching = matching;
+        this.explainer = explainer;
     }
 
     @GetMapping("/")
@@ -100,7 +104,7 @@ public class DashboardController {
     @GetMapping("/triage")
     public String triage(Model model, Authentication auth) {
         addLayout(model, auth, "triage");
-        model.addAttribute("accounts", jdbc.queryForList("""
+        List<Map<String, Object>> accounts = jdbc.queryForList("""
                 SELECT a.token, a.display_name, a.masked_account, a.segment, a.balance_paise,
                        a.monthly_turnover_paise, s.priority_score risk, s.role, s.recommendation,
                        s.reasons, s.tainted_held_paise
@@ -109,7 +113,19 @@ public class DashboardController {
                 WHERE a.token <> (SELECT c.victim_token FROM cases ca
                                   JOIN complaints c ON c.id=ca.complaint_id WHERE ca.case_id=?)
                 ORDER BY s.priority_score DESC
-                """, CASE_ID, CASE_ID));
+                """, CASE_ID, CASE_ID);
+        for (Map<String, Object> account : accounts) {
+            Object reasonValue = account.get("REASONS");
+            if (reasonValue == null) {
+                continue;
+            }
+            String reason = reasonValue.toString();
+            String explained = explainer.explain(reason);
+            if (!reason.equals(explained)) {
+                account.put("explained_reasons", explained);
+            }
+        }
+        model.addAttribute("accounts", accounts);
         return "triage";
     }
 
