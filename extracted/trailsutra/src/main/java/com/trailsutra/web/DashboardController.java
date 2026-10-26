@@ -76,6 +76,10 @@ public class DashboardController {
         addLayout(model, auth, "trail");
         List<Map<String, Object>> rows = jdbc.queryForList("""
                 SELECT e.txn_id, e.src_token, e.dst_token, e.amount_paise, e.event_at,
+                       CASE WHEN EXISTS (SELECT 1 FROM source_imports si
+                                         WHERE si.source_hash=t.source_hash
+                                           AND si.purpose='Public benchmark data')
+                            THEN 'Public benchmark data' END source_label,
                        s.display_name src_name, d.display_name dst_name,
                        COALESCE(ss.role, 'Suspected lead') src_role,
                        COALESCE(ds.role, 'Suspected lead') dst_role
@@ -155,7 +159,11 @@ public class DashboardController {
         ComplaintData caseComplaint = complaint(caseId);
         List<MatchCandidate> candidates = jdbc.query("""
                         SELECT t.txn_id, t.reference_token, t.src_token, t.dst_token,
-                               t.posted_at, t.amount_paise, s.display_name src_name, d.display_name dst_name
+                               t.posted_at, t.amount_paise, s.display_name src_name, d.display_name dst_name,
+                               CASE WHEN EXISTS (SELECT 1 FROM source_imports si
+                                                 WHERE si.source_hash=t.source_hash
+                                                   AND si.purpose='Public benchmark data')
+                                    THEN 'Public benchmark data' END source_label
                         FROM transactions t
                         LEFT JOIN accounts s ON s.token=t.src_token
                         LEFT JOIN accounts d ON d.token=t.dst_token
@@ -175,7 +183,8 @@ public class DashboardController {
                             amount, victimMatch, request.incidentAt(), postedAt);
                     String basis = "Reference, amount, victim, and time indicators";
                     return new MatchCandidate(rs.getString("txn_id"), score.score(),
-                            amount, postedAt.toString(), source, destination, basis);
+                            amount, postedAt.toString(), source, destination, basis,
+                            rs.getString("source_label"));
                 }, caseComplaint.referenceToken(), request.amountPaise());
         candidates.sort(Comparator.comparingDouble(MatchCandidate::score).reversed());
         return candidates;
@@ -369,7 +378,8 @@ public class DashboardController {
     public record MatchRequest(String ncrpId, String victimName, long amountPaise, Instant incidentAt,
                                String payerBank, String reference) {}
     public record MatchCandidate(String txnId, double score, long amountPaise,
-                                 String postedAt, String sourceName, String destinationName, String basis) {}
+                                 String postedAt, String sourceName, String destinationName,
+                                 String basis, String sourceLabel) {}
     private record ComplaintData(String complaintRef, String victimName, String victimToken, long amountPaise,
                                  OffsetDateTime incidentAt, String payerBank, String referenceToken) {}
 }

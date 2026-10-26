@@ -12,7 +12,7 @@
     <div class="reason-card" id="reasonCard" role="status"></div>
     <h3>Time-ordered Transactions</h3>
     <div class="table-wrap">
-      <table><thead><tr><th>Time</th><th>From</th><th>To</th><th>Amount (₹)</th><th>Transaction</th></tr></thead>
+      <table><thead><tr><th>Time</th><th>From</th><th>To</th><th>Amount (₹)</th><th>Transaction</th><th>Source</th></tr></thead>
         <tbody>
         <tr th:each="tx : ${trail}">
           <td th:text="${tx.event_at}">Time</td>
@@ -20,6 +20,7 @@
           <td th:text="${tx.dst_name}">Destination</td>
           <td th:text="${#numbers.formatDecimal(tx.amount_paise / 100.0,1,2)}">0.00</td>
           <td th:text="${tx.txn_id}">Transaction ID</td>
+          <td th:text="${tx.source_label != null ? tx.source_label : ''}"></td>
         </tr>
         </tbody>
       </table>

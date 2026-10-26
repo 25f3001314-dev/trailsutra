@@ -43,6 +43,7 @@
         addCell(row, new Date(candidate.postedAt).toLocaleString());
         addCell(row, candidate.sourceName);
         addCell(row, candidate.destinationName);
+        addCell(row, candidate.sourceLabel || '');
         const cell = document.createElement('td');
         const button = document.createElement('button');
         button.type = 'button';
