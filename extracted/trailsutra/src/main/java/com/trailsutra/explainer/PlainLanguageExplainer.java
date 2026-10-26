@@ -1,5 +1,6 @@
 package com.trailsutra.explainer;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +32,7 @@ public class PlainLanguageExplainer {
     private final ObjectMapper mapper;
     private final HttpClient client;
 
+    @Autowired
     public PlainLanguageExplainer(
             @Value("${trailsutra.explainer.enabled:false}") boolean enabled,
             ObjectMapper mapper) {
