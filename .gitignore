@@ -8,3 +8,4 @@ target/
 *.jks
 *.log
 .env
+*.lock.db
